@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+*{
+    font-family: "Varela Round", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+body {
+    font-family: "Varela Round", sans-serif;
+    background-image: url('vid.gif');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    color: #c84cff;
+}
+
+.container {
+    background-color: #000000cc;
+    backdrop-filter: blur(100px);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px #64008c99;
+    position: absolute;
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #e0e0e0;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #e0e0e0; 
+}
+
+input {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #290c35; 
+    border-radius: 4px;
+    background-color: #2a0032; 
+    color: #c84cff;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #002b1d;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #470067;
+    transform: scale(1.4) translateY(-2px);
+    box-shadow: 0  0 25px #c84cff; 
+}
+
+.hidden {
+    display: none;
+}
+
+#results p {
+    font-size: 1.2em;
+    margin: 5px 0;
+    color: #c84cff;
+}
+
+.enderpearl{
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    width:50px;
+    height:50px;
+    background-image: url(enderpearl.png);
+    background-size: cover;
+    animation: animationEnderpearl 4s ease-in-out infinite;
+}
+
+@keyframes animationEnderpearl{
+    0%{
+        transform: translate(0,0);
+        opacity: 0;
+    }
+    50%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+        transform: translate(100px,50vh);
+    }
+}
+
+#container2{
+    position: relative;
+    width:100%;
+    height:100vh;
+    background-image: url(background.jpg);
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#container2 .wrapper .display h1{
+    color: #c84cffb3;
+    padding: 10px;
+    padding-bottom: 20px;
+}
