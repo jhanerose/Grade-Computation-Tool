@@ -15,50 +15,57 @@ document.getElementById('grade-form').addEventListener('submit', function(event)
         return;
     }
 
-    // Calculate current total and required totals
-    const currentTotal = prelimGrade * prelimWeight;
-    const requiredTotal = targetGrade - currentTotal;
+    // Calculate remaining grade after prelim
+    const remainingGrade = targetGrade - (prelimWeight * prelimGrade);
 
     let requiredMidtermGrade;
     let requiredFinalGrade;
     let passMessage;
     let passMessageColor;
 
-    if (requiredTotal > 0) {
-        requiredFinalGrade = (requiredTotal - (midtermWeight * 100)) / finalWeight;
+    if (remainingGrade > 0) {
+        requiredFinalGrade = (remainingGrade - (midtermWeight * 100)) / finalWeight;
 
         if (requiredFinalGrade > 100) {
-            requiredMidtermGrade = (requiredTotal - (finalWeight * 100)) / midtermWeight;
+            requiredMidtermGrade = (remainingGrade - (finalWeight * 100)) / midtermWeight;
+            if (requiredMidtermGrade < 0 || requiredMidtermGrade > 100) {
+                passMessage = "It is difficult to pass.";
+                passMessageColor = "red";
+                displayResults(null, null, passMessage, passMessageColor, "", "");
+                return;
+            }
             requiredFinalGrade = 100;  // Cap final grade to 100
-        } else {
-            requiredMidtermGrade = requiredTotal / (midtermWeight + finalWeight);
-        }
-
-        if (requiredMidtermGrade > 90 || requiredFinalGrade > 90) {
-            passMessage = "It is difficult to pass, as the required grades are very high.";
+            passMessage = "You have a chance to pass!";
+            passMessageColor = "lightgreen";
+        } else if (requiredFinalGrade < 0) {
+            passMessage = "It is difficult to pass.";
             passMessageColor = "red";
+            displayResults(null, null, passMessage, passMessageColor, "", "");
+            return;
         } else {
+            requiredMidtermGrade = 100;
             passMessage = "You have a chance to pass!";
             passMessageColor = "lightgreen";
         }
     } else {
-        requiredMidtermGrade = 0;
-        requiredFinalGrade = 0;
         passMessage = "Your current grade is high enough to pass!";
         passMessageColor = "lightblue";
+        requiredMidtermGrade = 0;
+        requiredFinalGrade = 0;
     }
 
     // Dean's Lister calculations
     let deanMessage;
     let deansMessageColor;
-    if (prelimGrade >= deansListerGrade) {
-        deanMessage = "You already qualify for Dean's Lister based on your Prelim grade!";
-        deansMessageColor = "lightgreen";
-    } else {
-        const requiredDeanMidterm = (deansListerGrade - currentTotal) / midtermWeight;
-        const requiredDeanFinal = (deansListerGrade - currentTotal) / finalWeight;
-        deanMessage = `The required grade for you to be a Dean’s Lister is ${requiredDeanMidterm.toFixed(2)} (Midterm) and ${requiredDeanFinal.toFixed(2)} (Finals).`;
+    const deanMidtermGrade = (deansListerGrade - (prelimWeight * prelimGrade) - (finalWeight * 100)) / midtermWeight;
+    const deanFinalGrade = (deansListerGrade - (prelimWeight * prelimGrade) - (midtermWeight * 100)) / finalWeight;
+
+    if (deanMidtermGrade >= 0 && deanMidtermGrade <= 100 && deanFinalGrade >= 0 && deanFinalGrade <= 100) {
+        deanMessage = `To be a Dean's Lister, you need Midterm: ${deanMidtermGrade.toFixed(2)} and Final: ${deanFinalGrade.toFixed(2)}.`;
         deansMessageColor = "orange";
+    } else {
+        deanMessage = "It is not possible to be a Dean's Lister with the current grades.";
+        deansMessageColor = "red";
     }
 
     // Display results
@@ -66,8 +73,8 @@ document.getElementById('grade-form').addEventListener('submit', function(event)
 
     // Function to display results
     function displayResults(midterm, final, message, messageColor, deanMsg, deanColor) {
-        document.getElementById('midterm-result').textContent = `Required Midterm Grade: ${midterm.toFixed(2)}`;
-        document.getElementById('final-result').textContent = `Required Final Grade: ${final.toFixed(2)}`;
+        document.getElementById('midterm-result').textContent = midterm !== null ? `Required Midterm Grade: ${midterm.toFixed(2)}` : '';
+        document.getElementById('final-result').textContent = final !== null ? `Required Final Grade: ${final.toFixed(2)}` : '';
         document.getElementById('pass-message').textContent = message;
         document.getElementById('pass-message').style.color = messageColor;
         document.getElementById('dean-result').textContent = deanMsg;
@@ -75,6 +82,7 @@ document.getElementById('grade-form').addEventListener('submit', function(event)
         document.getElementById('results').classList.remove('hidden');
     }
 });
+
 
 
 // Enderpearl animation effect
